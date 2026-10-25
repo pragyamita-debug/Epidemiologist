@@ -1,9 +1,9 @@
 {
-  "name": "cybersecurity-cv-dashboard",
+  "name": "epidemiologist-cv-dashboard",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Candidates upload a CV and get an animated cyber-trust ecosystem dashboard.",
+  "description": "Candidates upload a CV and get an animated dashboard of glass story bubbles.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
