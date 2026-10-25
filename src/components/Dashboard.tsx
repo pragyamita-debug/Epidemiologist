@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import type { Resume } from '../lib/types';
 import { buildStories, Hero } from './Hero';
-import { Career, Credentials, Expertise, Footer, Horizon, NAV, Numbers, Outcomes, TopBar } from './Sections';
+import { Footer, NAV, TopBar } from './Sections';
+import { Ahead, CareerOrbit, Cover, CredentialsSlide, Methods, OutcomesSlide } from './Slides';
 import { StoryDialog } from './StoryDialog';
 import './Dashboard.css';
 
@@ -18,12 +19,15 @@ export function Dashboard({ resume }: { resume: Resume }) {
       <TopBar resume={resume} active={active} />
       <main>
         <Hero resume={resume} stories={stories} onOpen={setOpen} />
-        <Numbers resume={resume} />
-        <Expertise resume={resume} />
-        <Career resume={resume} />
-        <Credentials resume={resume} />
-        <Outcomes resume={resume} />
-        <Horizon resume={resume} />
+        {/* the rest of the page is laid out as presentation slides */}
+        <div className="deck">
+          <Cover resume={resume} />
+          <Methods resume={resume} />
+          <CareerOrbit resume={resume} />
+          <OutcomesSlide resume={resume} />
+          <CredentialsSlide resume={resume} />
+          <Ahead resume={resume} />
+        </div>
       </main>
       <Footer resume={resume} />
       {open !== null && stories.length > 0 && <StoryDialog stories={stories} index={open} onIndex={setOpen} onClose={() => setOpen(null)} />}
