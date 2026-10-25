@@ -4,6 +4,7 @@ import type { Resume } from '../lib/types';
 import { buildStories, Hero } from './Hero';
 import { Footer, NAV, TopBar } from './Sections';
 import { Ahead, CareerOrbit, Cover, CredentialsSlide, Methods, OutcomesSlide } from './Slides';
+import { NeuronField } from './NeuronField';
 import { StoryDialog } from './StoryDialog';
 import './Dashboard.css';
 
@@ -19,8 +20,9 @@ export function Dashboard({ resume }: { resume: Resume }) {
       <TopBar resume={resume} active={active} />
       <main>
         <Hero resume={resume} stories={stories} onOpen={setOpen} />
-        {/* the rest of the page is laid out as presentation slides */}
+        {/* below the hero: presentation-style bands over a living neuron network */}
         <div className="deck">
+          <NeuronField />
           <Cover resume={resume} />
           <Methods resume={resume} />
           <CareerOrbit resume={resume} />

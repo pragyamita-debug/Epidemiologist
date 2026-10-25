@@ -1,9 +1,9 @@
 import type { CSSProperties, ReactNode } from 'react';
 import bars from '../assets/photos/glass-bars.jpg';
-import dna from '../assets/photos/glass-dna.jpg';
-import flower from '../assets/photos/glass-flower.jpg';
-import globe from '../assets/photos/glass-globe.jpg';
-import pie from '../assets/photos/glass-pie.jpg';
+import dna from '../assets/photos/glass-dna.webp';
+import flower from '../assets/photos/glass-flower.webp';
+import globe from '../assets/photos/glass-globe.webp';
+import pie from '../assets/photos/glass-pie.webp';
 import { useCountUp } from '../hooks/useCountUp';
 import { useInView } from '../hooks/useInView';
 import { useParallax } from '../hooks/useParallax';
@@ -15,12 +15,12 @@ import { Icon } from './Icon';
 /* ================= shared pieces ================= */
 
 /** A photo that drifts with the scroll, breathes slowly, and catches a glint of light now and then. */
-function Photo({ src, className = '' }: { src: string; className?: string }) {
+function Photo({ src, className = '', cut = false }: { src: string; className?: string; cut?: boolean }) {
   const ref = useParallax<HTMLDivElement>();
   return (
-    <div className={`ph ${className}`} ref={ref} aria-hidden>
+    <div className={`ph ${cut ? 'ph--cut' : ''} ${className}`} ref={ref} aria-hidden>
       <img src={src} alt="" loading="lazy" draggable={false} />
-      <span className="ph__glint" />
+      <span className="ph__glint" style={cut ? ({ '--cut': `url(${src})` } as CSSProperties) : undefined} />
     </div>
   );
 }
@@ -60,11 +60,11 @@ function IndexCard({ n, items, foot }: { n: string; items: { t: string; sub?: st
   );
 }
 
-function Divider({ id, n, title, items, photo, tone, foot, label, children }: { id?: string; n: string; title: string; items: { t: string; sub?: string }[]; photo: string; tone: 'violet' | 'mint'; foot?: string; label: string; children?: ReactNode }) {
+function Divider({ id, n, title, items, photo, cut = true, tone, foot, label, children }: { id?: string; n: string; title: string; items: { t: string; sub?: string }[]; photo: string; cut?: boolean; tone: 'violet' | 'mint'; foot?: string; label: string; children?: ReactNode }) {
   const [a, b] = twoLines(title);
   return (
     <Slide id={id} tone={tone} label={label}>
-      <Photo src={photo} className="divider__photo" />
+      <Photo src={photo} cut={cut} className="divider__photo" />
       <div className="divider wrap">
         <IndexCard n={n} items={items} foot={foot} />
         <div className="divider__side">
@@ -92,7 +92,7 @@ export function Cover({ resume }: { resume: Resume }) {
   const pad = (v: number) => String(Math.round(v)).padStart(2, '0');
   return (
     <Slide id="overview" tone="cover" label="Overview in numbers">
-      <Photo src={dna} className="cover__photo" />
+      <Photo src={dna} cut className="cover__photo" />
       <div className="cover wrap" ref={ref}>
         <p className="cover__kicker">Portfolio overview</p>
         <div className="cover__figs">
@@ -202,7 +202,7 @@ export function CareerOrbit({ resume }: { resume: Resume }) {
 export function OutcomesSlide({ resume }: { resume: Resume }) {
   if (!resume.achievements.length) return null;
   return (
-    <Divider id="outcomes" n="02" title="What changed because of it" items={resume.achievements.slice(0, 6).map((t) => ({ t }))} photo={bars} tone="mint" foot={`${resume.achievements.length} outcomes`} label="Outcomes" />
+    <Divider id="outcomes" n="02" title="What changed because of it" items={resume.achievements.slice(0, 6).map((t) => ({ t }))} photo={bars} cut={false} tone="mint" foot={`${resume.achievements.length} outcomes`} label="Outcomes" />
   );
 }
 
@@ -245,7 +245,7 @@ export function CredentialsSlide({ resume }: { resume: Resume }) {
               </li>
             ))}
           </ul>
-          <Photo src={pie} className="pie-slide__photo" />
+          <Photo src={pie} cut className="pie-slide__photo" />
         </div>
       </div>
     </Slide>
