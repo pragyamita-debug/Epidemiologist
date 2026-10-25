@@ -11,7 +11,6 @@ import { iconFor, twoLines } from '../lib/epi';
 import type { Resume } from '../lib/types';
 import { GlowCard } from './GlowCard';
 import { Icon } from './Icon';
-import { Logo } from './Logo';
 
 /* ================= shared pieces ================= */
 
@@ -26,17 +25,16 @@ function Photo({ src, className = '' }: { src: string; className?: string }) {
   );
 }
 
-/** Wraps a slide: rounded "presentation" panel that reveals its contents when it scrolls into view. */
+/**
+ * One full-width band of the page. There are no boxes: each band's top and bottom edges fade through the same
+ * soft violet "seam" colour, so neighbouring bands always melt into each other whichever ones are shown.
+ * Its contents reveal when it scrolls into view.
+ */
 function Slide({ id, tone, children, label }: { id?: string; tone: 'violet' | 'mint' | 'light' | 'cover'; children: ReactNode; label: string }) {
-  const [ref, inView] = useInView<HTMLDivElement>(0.18);
+  const [ref, inView] = useInView<HTMLElement>(0.18);
   return (
-    <section className="wrap deck__item" id={id} aria-label={label}>
-      <div ref={ref} className={`slide slide--${tone} ${inView ? 'is-in' : ''}`}>
-        <span className="slide__mark" aria-hidden>
-          <Logo size={22} />
-        </span>
-        {children}
-      </div>
+    <section ref={ref} id={id} aria-label={label} className={`slide slide--${tone} ${inView ? 'is-in' : ''}`}>
+      {children}
     </section>
   );
 }
@@ -67,7 +65,7 @@ function Divider({ id, n, title, items, photo, tone, foot, label, children }: { 
   return (
     <Slide id={id} tone={tone} label={label}>
       <Photo src={photo} className="divider__photo" />
-      <div className="divider">
+      <div className="divider wrap">
         <IndexCard n={n} items={items} foot={foot} />
         <div className="divider__side">
           <h2 className="divider__title">
@@ -95,7 +93,7 @@ export function Cover({ resume }: { resume: Resume }) {
   return (
     <Slide id="overview" tone="cover" label="Overview in numbers">
       <Photo src={dna} className="cover__photo" />
-      <div className="cover" ref={ref}>
+      <div className="cover wrap" ref={ref}>
         <p className="cover__kicker">Portfolio overview</p>
         <div className="cover__figs">
           <div className="cover__row">
@@ -163,7 +161,7 @@ export function CareerOrbit({ resume }: { resume: Resume }) {
   };
   return (
     <Slide id="career" tone="light" label="Career">
-      <div className="orbit-slide">
+      <div className="orbit-slide wrap">
         <header className="slide__head">
           <span className="slide__pill" aria-hidden />
           <div>
@@ -217,7 +215,7 @@ export function CredentialsSlide({ resume }: { resume: Resume }) {
   if (!callouts.length) return null;
   return (
     <Slide id="credentials" tone="light" label="Training and certification">
-      <div className="pie-slide" ref={ref}>
+      <div className="pie-slide wrap" ref={ref}>
         <div className="pie-slide__left">
           <header className="slide__head">
             <span className="slide__pill" aria-hidden />

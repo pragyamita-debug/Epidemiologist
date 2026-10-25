@@ -1,8 +1,8 @@
 # Stories from the Field — Epidemiologist Portfolio
 
 An animated epidemiologist portfolio. The top is a "microbiome stories" scene: every role and study is a glass
-bubble floating over a rising orange sun on deep teal water. Below it the page turns into a lavender presentation
-deck — a glass-DNA cover with outlined counting figures, numbered divider slides (01 methods, 02 outcomes, 03 goals)
+bubble floating over a rising orange sun on deep teal water. Below it the page flows on, without boxes or gaps, into
+lavender presentation-style bands that melt into one another — a glass-DNA cover with outlined counting figures, numbered divider slides (01 methods, 02 outcomes, 03 goals)
 with glass photos, a career orbit and a glass pie for credentials.
 
 ## Edit the content
