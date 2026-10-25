@@ -1,10 +1,12 @@
 import type { Resume } from '../lib/types';
 
 /**
- * What the page shows before anyone uploads a CV: the full design, filled with
- * neutral placeholder text. Uploading a CV replaces every field below.
+ * Everything the dashboard shows comes from this object.
+ * Replace the placeholder values with real ones and the whole page updates —
+ * no other file needs to change. The numbers in `stats` are what count up.
+ * The first three roles, then the projects, become the seven story bubbles.
  */
-export const placeholder: Resume = {
+export const profile: Resume = {
   name: 'Your Name',
   headline: 'Your Role | Your Specialty',
   tagline: 'One sentence about the health questions you answer and why they matter.',
@@ -16,16 +18,17 @@ export const placeholder: Resume = {
     github: 'https://github.com/',
   },
   summary:
-    'Two or three sentences about the populations you study, the methods you use and what you are looking for next. Upload a CV and this is replaced by your own profile.',
+    'Two or three sentences about the populations you study, the methods you use and what you are looking for next.',
   motto: 'Every number is a person.',
+  title: 'Stories from the field',
 
   experience: [
-    { role: 'Your Current Role', company: 'Company Name', period: '2023 – Present', current: true, months: 0, bullets: ['What you are responsible for.', 'A result you are proud of.'] },
-    { role: 'Previous Role', company: 'Company Name', period: '2020 – 2023', current: false, months: 0, bullets: ['What you delivered there.'] },
-    { role: 'Earlier Role', company: 'Company Name', period: '2018 – 2020', current: false, months: 0, bullets: ['Where you started.'] },
+    { role: 'Your Current Role', company: 'Company Name', period: '2023 – Present', current: true, bullets: ['What you are responsible for.', 'A result you are proud of.'] },
+    { role: 'Previous Role', company: 'Company Name', period: '2020 – 2023', current: false, bullets: ['What you delivered there.'] },
+    { role: 'Earlier Role', company: 'Company Name', period: '2018 – 2020', current: false, bullets: ['Where you started.'] },
   ],
 
-  education: [{ degree: 'Your Degree in Your Subject', short: 'M.Sc.', field: 'Your Subject', institution: 'Your University', year: '2020', rank: 4 }],
+  education: [{ degree: 'Your Degree in Your Subject', short: 'M.Sc.', field: 'Your Subject', institution: 'Your University', year: '2020' }],
 
   skills: [
     'Skill One',
@@ -60,7 +63,6 @@ export const placeholder: Resume = {
   ],
 
   interests: ['Interest One', 'Interest Two', 'Interest Three', 'Interest Four', 'Interest Five'],
-  languages: [],
 
   stats: { years: 5, yearsPlus: true, projects: 6, projectsPlus: false, skills: 12 },
 };

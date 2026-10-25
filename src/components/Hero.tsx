@@ -29,11 +29,11 @@ export interface Story {
  */
 const STAGE = { w: 1240, h: 900 };
 const SLOTS = [
-  { photo: b2, x: 578, y: 300, d: 262, depth: 1, side: 'left', ly: 420, bob: 7.5 },
+  { photo: b2, x: 578, y: 300, d: 262, depth: 1, side: 'left', ly: 490, bob: 7.5 },
   { photo: b6, x: 598, y: 732, d: 286, depth: 0.7, side: 'left', ly: 800, bob: 9 },
   { photo: b4, x: 776, y: 548, d: 234, depth: 1.25, side: 'right', ly: 560, bob: 8.2 },
   { photo: b1, x: 742, y: 112, d: 186, depth: 1.5, side: 'right', ly: 112, bob: 6.8 },
-  { photo: b5, x: 486, y: 586, d: 194, depth: 0.9, side: 'left', ly: 610, bob: 8.8 },
+  { photo: b5, x: 486, y: 586, d: 194, depth: 0.9, side: 'left', ly: 655, bob: 8.8 },
   { photo: b3, x: 632, y: 500, d: 172, depth: 1.1, side: 'none', ly: 0, bob: 7.1 },
   { photo: b7, x: 758, y: 298, d: 90, depth: 1.8, side: 'right', ly: 300, bob: 5.6 },
 ] as const;
@@ -80,12 +80,10 @@ function useStageFit() {
 interface Props {
   resume: Resume;
   stories: Story[];
-  isExample: boolean;
-  onUpload: () => void;
   onOpen: (i: number) => void;
 }
 
-export function Hero({ resume, stories, isExample, onUpload, onOpen }: Props) {
+export function Hero({ resume, stories, onOpen }: Props) {
   const [role, focus] = splitHeadline(resume.headline);
   const reduced = useReducedMotion();
   const { zoom, compact } = useStageFit();
@@ -93,6 +91,8 @@ export function Hero({ resume, stories, isExample, onUpload, onOpen }: Props) {
   const [ready, setReady] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
   const count = useCountUp(stories.length, ready, { duration: 1600, delay: 400 });
+  // the heading is set in two lines, the second in italic, like the serif titles in the design
+  const heading = twoLines(resume.title || 'Stories from the field');
 
   useEffect(() => {
     const t = window.setTimeout(() => setReady(true), 60);
@@ -109,25 +109,27 @@ export function Hero({ resume, stories, isExample, onUpload, onOpen }: Props) {
 
   const title = (
     <div className="hero__head">
+      <p className="hero__eyebrow">
+        <b>{String(Math.round(count)).padStart(2, '0')}</b> stories <i /> {resume.stats.years}
+        {resume.stats.yearsPlus ? '+' : ''} years in public health
+      </p>
       <h1 className="hero__title">
-        <span className="hero__num">{Math.round(count)}</span> public health
-        <br />
-        stories
+        {heading[0]}
+        {heading[1] && (
+          <>
+            <br />
+            <em>{heading[1]}</em>
+          </>
+        )}
       </h1>
       <p className="hero__who">
         {resume.name} <span>—</span> {role}
         {focus && <em>{focus}</em>}
       </p>
       <div className="hero__actions">
-        {isExample ? (
-          <button className="pill" onClick={onUpload}>
-            <Icon name="upload" size={16} /> Upload your CV
-          </button>
-        ) : (
-          <a className="pill" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
-            <Icon name="mail" size={16} /> Get in touch
-          </a>
-        )}
+        <a className="pill" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
+          <Icon name="mail" size={16} /> Get in touch
+        </a>
         <button className="pill pill--glass" onClick={() => onOpen(0)}>
           Read the stories
         </button>

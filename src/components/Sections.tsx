@@ -199,7 +199,7 @@ export const NAV = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export function TopBar({ resume, active, isExample, onUpload }: { resume: Resume; active: string; isExample: boolean; onUpload: () => void }) {
+export function TopBar({ resume, active }: { resume: Resume; active: string }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -223,15 +223,9 @@ export function TopBar({ resume, active, isExample, onUpload }: { resume: Resume
           ))}
         </nav>
         <div className="top__end">
-          {isExample ? (
-            <button className="pill pill--sm" onClick={onUpload}>
-              <Icon name="upload" size={15} /> Upload CV
-            </button>
-          ) : (
-            <a className="pill pill--sm" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
-              <Icon name="mail" size={15} /> Contact
-            </a>
-          )}
+          <a className="pill pill--sm" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
+            <Icon name="mail" size={15} /> Contact
+          </a>
           <button className="icon-btn top__burger" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <Icon name={open ? 'close' : 'menu'} size={17} />
           </button>
@@ -241,16 +235,7 @@ export function TopBar({ resume, active, isExample, onUpload }: { resume: Resume
   );
 }
 
-interface FooterProps {
-  resume: Resume;
-  isExample: boolean;
-  onUpload: () => void;
-  onEdit: () => void;
-  onReset: () => void;
-  onDownloadCv: () => void;
-}
-
-export function Footer({ resume, isExample, onUpload, onEdit, onReset, onDownloadCv }: FooterProps) {
+export function Footer({ resume }: { resume: Resume }) {
   const web = (u: string) => (u.startsWith('http') ? u : `https://${u}`);
   const links = [
     resume.email && { icon: 'mail' as const, label: resume.email, href: `mailto:${resume.email}` },
@@ -282,30 +267,14 @@ export function Footer({ resume, isExample, onUpload, onEdit, onReset, onDownloa
             </li>
           ))}
         </ul>
-        <div className="foot__actions">
-          {isExample ? (
-            <button className="pill pill--sm" onClick={onUpload}>
-              <Icon name="upload" size={15} /> Upload your CV
-            </button>
-          ) : (
-            <>
-              <button className="pill pill--glass pill--sm" onClick={onEdit}>
-                <Icon name="edit" size={15} /> Edit details
-              </button>
-              <button className="pill pill--glass pill--sm" onClick={onDownloadCv}>
-                <Icon name="download" size={15} /> Download CV
-              </button>
-              <button className="pill pill--glass pill--sm" onClick={onUpload}>
-                <Icon name="upload" size={15} /> New CV
-              </button>
-              <button className="pill pill--glass pill--sm" onClick={onReset}>
-                <Icon name="refresh" size={15} /> Example
-              </button>
-            </>
-          )}
-        </div>
+        {resume.cvUrl && (
+          <div className="foot__actions">
+            <a className="pill pill--glass pill--sm" href={resume.cvUrl} download>
+              <Icon name="download" size={15} /> Download CV
+            </a>
+          </div>
+        )}
       </div>
-      <p className="foot__note wrap">Your CV is read in your browser and stored only on this device.</p>
     </footer>
   );
 }
