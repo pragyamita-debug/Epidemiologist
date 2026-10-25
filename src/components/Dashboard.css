@@ -110,16 +110,38 @@ main { overflow-x: clip; }
 .slide--mint::after { background: radial-gradient(45% 55% at 82% 50%, rgba(90, 210, 190, 0.18), transparent 70%); }
 .slide--cover { min-height: 720px; }
 
-/* photos: fade in on reveal, drift with scroll, breathe, and catch a glint */
-.ph { position: absolute; overflow: hidden; opacity: 0; filter: blur(10px) saturate(0.8); transition: opacity 1.4s var(--ease-out), filter 1.4s var(--ease-out); }
-.slide.is-in .ph { opacity: 1; filter: none; }
-.ph img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; filter: brightness(0.82) contrast(1.25) saturate(1.15); translate: 0 calc(var(--p, 0) * -34px); animation: breathe-photo 22s ease-in-out infinite alternate; will-change: scale, translate; }
-@keyframes breathe-photo { from { scale: 1.1; object-position: 46% 50%; } to { scale: 1.18; object-position: 54% 47%; } }
+/* the big pictures: each one makes an entrance when its band scrolls in, then keeps its own motion */
+.ph { position: absolute; overflow: hidden; perspective: 1200px; }
+.ph__in { position: absolute; inset: 0; display: block; opacity: 0; filter: blur(14px); transform: translateY(90px) scale(0.78) rotate(-6deg); transition: opacity 1.4s var(--ease-out), filter 1.4s var(--ease-out), transform 1.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.slide.is-in .ph__in { opacity: 1; filter: none; transform: translate(calc(var(--tx, 0) * 18px), calc(var(--ty, 0) * 14px + var(--p, 0) * -40px)) rotateY(calc(var(--tx, 0) * 7deg)) rotateX(calc(var(--ty, 0) * -6deg)); transition: opacity 1.4s var(--ease-out), filter 1.4s var(--ease-out), transform 1.8s cubic-bezier(0.16, 1, 0.3, 1); }
+/* after the entrance, follow the pointer quickly */
+.slide.is-in:hover .ph__in { transition: opacity 1.4s, filter 1.4s, transform 0.9s var(--ease-out); }
+.ph--dna .ph__in { transform: translateX(160px) scale(0.85) rotate(-10deg); }
+.ph--flower .ph__in { transform: scale(0.35) rotate(-90deg); }
+.ph--bars .ph__in { transform: translateY(140px) scaleY(0.4); transform-origin: 50% 100%; }
+.ph--pie .ph__in { transform: rotateX(70deg) scale(0.7); }
+.ph--globe .ph__in { transform: translateY(120px) scale(0.7); }
+
+.ph img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; filter: brightness(0.82) contrast(1.25) saturate(1.15); will-change: transform; }
+/* each object's own motion */
+.ph--dna img { animation: dna-sway 12s ease-in-out infinite; transform-origin: 50% 50%; }
+@keyframes dna-sway { 0%, 100% { transform: translateY(0) rotate(-3deg) rotateY(0deg) scale(1); } 25% { transform: translateY(-14px) rotate(1deg) rotateY(14deg) scale(1.03); } 50% { transform: translateY(-4px) rotate(3deg) rotateY(0deg) scale(1.05); } 75% { transform: translateY(-16px) rotate(-1deg) rotateY(-14deg) scale(1.02); } }
+.ph--flower img { animation: flower-turn 26s linear infinite, bob-y 7s ease-in-out infinite; }
+@keyframes flower-turn { to { rotate: 360deg; } }
+@keyframes bob-y { 50% { translate: 0 -18px; } }
+.ph--bars img { animation: bars-breathe 14s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes bars-breathe { from { transform: scale(1.06) translateY(0); } to { transform: scale(1.14) translateY(-10px); } }
+.ph--pie img { animation: pie-tilt 10s ease-in-out infinite; transform-origin: 50% 60%; }
+@keyframes pie-tilt { 0%, 100% { transform: rotateX(0deg) rotate(0deg) translateY(0); } 33% { transform: rotateX(14deg) rotate(4deg) translateY(-12px); } 66% { transform: rotateX(-6deg) rotate(-3deg) translateY(-4px); } }
+.ph--globe img { animation: globe-lift 9s ease-in-out infinite; transform-origin: 50% 70%; }
+@keyframes globe-lift { 0%, 100% { transform: translateY(0) rotate(-2deg) scale(1); } 50% { transform: translateY(-20px) rotate(2deg) scale(1.04); } }
+
 /* cut-out glass objects float on the neuron field: no blend, no feathered box, a soft glow behind them */
 .ph.ph--cut { -webkit-mask: none !important; mask: none !important; overflow: visible; }
-.ph--cut img { object-fit: contain; mix-blend-mode: normal; -webkit-mask: linear-gradient(180deg, #000 82%, transparent 100%); mask: linear-gradient(180deg, #000 82%, transparent 100%); filter: drop-shadow(0 0 40px rgba(120, 200, 230, 0.25)) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55)); animation: float-obj 9s ease-in-out infinite alternate; }
-@keyframes float-obj { from { transform: translateY(0) rotate(-1deg) scale(1); } to { transform: translateY(-16px) rotate(1.2deg) scale(1.03); } }
-.ph--cut::before { content: ''; position: absolute; inset: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(110, 90, 220, 0.28), rgba(80, 200, 220, 0.1) 60%, transparent); filter: blur(20px); }
+.ph--cut img { object-fit: contain; mix-blend-mode: normal; -webkit-mask: linear-gradient(180deg, #000 82%, transparent 100%); mask: linear-gradient(180deg, #000 82%, transparent 100%); filter: drop-shadow(0 0 40px rgba(120, 200, 230, 0.25)) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55)); }
+.ph--cut::before { content: ''; position: absolute; inset: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(110, 90, 220, 0.32), rgba(80, 200, 220, 0.12) 60%, transparent); filter: blur(20px); opacity: 0; transition: opacity 2s 0.6s; animation: halo 6s ease-in-out infinite; }
+.slide.is-in .ph--cut::before { opacity: 1; }
+@keyframes halo { 50% { transform: scale(1.12); } }
 .ph--cut .ph__glint { -webkit-mask: var(--cut) center / contain no-repeat; mask: var(--cut) center / contain no-repeat; }
 .ph__glint { position: absolute; inset: 0; background: linear-gradient(112deg, transparent 38%, rgba(255, 255, 255, 0.4) 48%, rgba(255, 255, 255, 0.08) 53%, transparent 62%); mix-blend-mode: soft-light; transform: translateX(-130%); animation: glint 8s ease-in-out infinite; animation-delay: 2s; }
 @keyframes glint { 0%, 55% { transform: translateX(-130%); } 100% { transform: translateX(130%); } }
@@ -292,9 +314,9 @@ main { overflow-x: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stage__sun, .stage__sea, .hero__motes i, .bubble, .bubble__float, .bubble__glass::after, .tag, .stage__link path, .stage__link circle, .stage__dots, .story__photo img, .ph img, .ph__glint, .glass-chips li, .neuro__photo, .ph--cut img, .orbit2__ring--outer::after, .orbit2__core::before { animation: none !important; opacity: 1; stroke-dashoffset: 0; }
+  .stage__sun, .stage__sea, .hero__motes i, .bubble, .bubble__float, .bubble__glass::after, .tag, .stage__link path, .stage__link circle, .stage__dots, .story__photo img, .ph img, .ph__glint, .ph--cut::before, .glass-chips li, .neuro__photo, .ph--cut img, .orbit2__ring--outer::after, .orbit2__core::before { animation: none !important; opacity: 1; stroke-dashoffset: 0; }
   .ph__glint { display: none; }
-  .ph img { translate: none; }
+  .ph__in, .slide.is-in .ph__in { opacity: 1; filter: none; transform: none !important; transition: none; }
   .hero__motes { display: none; }
   .bubble { transform: none; }
 }

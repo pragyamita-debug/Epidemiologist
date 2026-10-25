@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, PointerEvent, ReactNode } from 'react';
 import bars from '../assets/photos/glass-bars.jpg';
 import dna from '../assets/photos/glass-dna.webp';
 import flower from '../assets/photos/glass-flower.webp';
@@ -15,12 +15,17 @@ import { Icon } from './Icon';
 /* ================= shared pieces ================= */
 
 /** A photo that drifts with the scroll, breathes slowly, and catches a glint of light now and then. */
-function Photo({ src, className = '', cut = false }: { src: string; className?: string; cut?: boolean }) {
+type Motion = 'dna' | 'flower' | 'bars' | 'pie' | 'globe';
+
+function Photo({ src, className = '', cut = false, motion }: { src: string; className?: string; cut?: boolean; motion: Motion }) {
   const ref = useParallax<HTMLDivElement>();
   return (
-    <div className={`ph ${cut ? 'ph--cut' : ''} ${className}`} ref={ref} aria-hidden>
-      <img src={src} alt="" loading="lazy" draggable={false} />
-      <span className="ph__glint" style={cut ? ({ '--cut': `url(${src})` } as CSSProperties) : undefined} />
+    <div className={`ph ph--${motion} ${cut ? 'ph--cut' : ''} ${className}`} ref={ref} aria-hidden>
+      {/* outer span: entrance + pointer tilt; the img: the object's own continuous motion */}
+      <span className="ph__in">
+        <img src={src} alt="" loading="lazy" draggable={false} />
+        <span className="ph__glint" style={cut ? ({ '--cut': `url(${src})` } as CSSProperties) : undefined} />
+      </span>
     </div>
   );
 }
@@ -32,8 +37,19 @@ function Photo({ src, className = '', cut = false }: { src: string; className?: 
  */
 function Slide({ id, tone, children, label }: { id?: string; tone: 'violet' | 'mint' | 'light' | 'cover'; children: ReactNode; label: string }) {
   const [ref, inView] = useInView<HTMLElement>(0.18);
+  // pointer position (−1…1) for the big picture's tilt; written straight to CSS so React doesn't re-render
+  const onMove = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType === 'touch') return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--tx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+    e.currentTarget.style.setProperty('--ty', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+  };
+  const onLeave = (e: PointerEvent<HTMLElement>) => {
+    e.currentTarget.style.setProperty('--tx', '0');
+    e.currentTarget.style.setProperty('--ty', '0');
+  };
   return (
-    <section ref={ref} id={id} aria-label={label} className={`slide slide--${tone} ${inView ? 'is-in' : ''}`}>
+    <section ref={ref} id={id} aria-label={label} className={`slide slide--${tone} ${inView ? 'is-in' : ''}`} onPointerMove={onMove} onPointerLeave={onLeave}>
       {children}
     </section>
   );
@@ -60,11 +76,11 @@ function IndexCard({ n, items, foot }: { n: string; items: { t: string; sub?: st
   );
 }
 
-function Divider({ id, n, title, items, photo, cut = true, tone, foot, label, children }: { id?: string; n: string; title: string; items: { t: string; sub?: string }[]; photo: string; cut?: boolean; tone: 'violet' | 'mint'; foot?: string; label: string; children?: ReactNode }) {
+function Divider({ id, n, title, items, photo, motion, cut = true, tone, foot, label, children }: { id?: string; n: string; title: string; items: { t: string; sub?: string }[]; photo: string; motion: Motion; cut?: boolean; tone: 'violet' | 'mint'; foot?: string; label: string; children?: ReactNode }) {
   const [a, b] = twoLines(title);
   return (
     <Slide id={id} tone={tone} label={label}>
-      <Photo src={photo} cut={cut} className="divider__photo" />
+      <Photo src={photo} cut={cut} motion={motion} className="divider__photo" />
       <div className="divider wrap">
         <IndexCard n={n} items={items} foot={foot} />
         <div className="divider__side">
@@ -92,7 +108,7 @@ export function Cover({ resume }: { resume: Resume }) {
   const pad = (v: number) => String(Math.round(v)).padStart(2, '0');
   return (
     <Slide id="overview" tone="cover" label="Overview in numbers">
-      <Photo src={dna} cut className="cover__photo" />
+      <Photo src={dna} cut motion="dna" className="cover__photo" />
       <div className="cover wrap" ref={ref}>
         <p className="cover__kicker">Portfolio overview</p>
         <div className="cover__figs">
@@ -132,7 +148,7 @@ export function Methods({ resume }: { resume: Resume }) {
   const lead = resume.skills.slice(0, 6);
   const rest = resume.skills.slice(6);
   return (
-    <Divider id="expertise" n="01" title="Methods & tools" items={lead.map((t) => ({ t }))} photo={flower} tone="violet" foot={`${resume.skills.length} in total`} label="Methods and tools">
+    <Divider id="expertise" n="01" title="Methods & tools" items={lead.map((t) => ({ t }))} photo={flower} motion="flower" tone="violet" foot={`${resume.skills.length} in total`} label="Methods and tools">
       {rest.length > 0 && (
         <ul className="glass-chips">
           {rest.map((s, i) => (
@@ -202,7 +218,7 @@ export function CareerOrbit({ resume }: { resume: Resume }) {
 export function OutcomesSlide({ resume }: { resume: Resume }) {
   if (!resume.achievements.length) return null;
   return (
-    <Divider id="outcomes" n="02" title="What changed because of it" items={resume.achievements.slice(0, 6).map((t) => ({ t }))} photo={bars} cut={false} tone="mint" foot={`${resume.achievements.length} outcomes`} label="Outcomes" />
+    <Divider id="outcomes" n="02" title="What changed because of it" items={resume.achievements.slice(0, 6).map((t) => ({ t }))} photo={bars} motion="bars" cut={false} tone="mint" foot={`${resume.achievements.length} outcomes`} label="Outcomes" />
   );
 }
 
@@ -245,7 +261,7 @@ export function CredentialsSlide({ resume }: { resume: Resume }) {
               </li>
             ))}
           </ul>
-          <Photo src={pie} cut className="pie-slide__photo" />
+          <Photo src={pie} cut motion="pie" className="pie-slide__photo" />
         </div>
       </div>
     </Slide>
@@ -258,6 +274,6 @@ export function Ahead({ resume }: { resume: Resume }) {
   const items = [...resume.goals.map((g) => ({ t: g.value, sub: g.note || g.label })), ...resume.interests.map((t) => ({ t, sub: 'Interest' }))].slice(0, 6);
   if (!items.length) return null;
   return (
-    <Divider id="ahead" n="03" title={resume.motto || 'Looking ahead'} items={items} photo={globe} tone="violet" foot="Goals & interests" label="Goals and interests" />
+    <Divider id="ahead" n="03" title={resume.motto || 'Looking ahead'} items={items} photo={globe} motion="globe" tone="violet" foot="Goals & interests" label="Goals and interests" />
   );
 }
