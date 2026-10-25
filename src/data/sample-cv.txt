@@ -1,0 +1,73 @@
+MORGAN ELLIS
+Epidemiologist | Infectious Disease & Outbreak Response
+Turning data into decisions that keep communities healthy.
+morgan.ellis@example.com | +44 20 7946 0321 | London, UK | linkedin.com/in/morgan-ellis-example
+
+PROFILE
+Epidemiologist with 9+ years in disease surveillance, outbreak investigation and public health research. I design studies, model transmission and turn messy field data into clear guidance for health agencies.
+
+EXPERIENCE
+Senior Epidemiologist — Example Public Health Agency | Apr 2021 – Present
+• Lead surveillance for 14 notifiable diseases across a population of 6 million.
+• Built an early-warning dashboard that flags clusters 5 days sooner.
+• Advise ministers and local teams during outbreaks.
+
+Field Epidemiologist — Global Health Response Unit | Aug 2018 – Mar 2021
+• Investigated 20+ outbreaks including cholera, measles and dengue.
+• Trained 120 local staff in contact tracing and case definitions.
+
+Research Analyst — Institute of Population Health | Jan 2017 – Jul 2018
+• Analysed cohort data on vaccine uptake and chronic disease risk.
+
+EDUCATION
+M.Sc. in Epidemiology — University of Example | 2016
+B.Sc. in Microbiology — Example State University | 2015
+
+SKILLS
+Outbreak Investigation, Disease Surveillance, Biostatistics, Study Design, Transmission Modelling, Field Epidemiology, R, SAS, Python, GIS Mapping, Data Visualisation, Survey Design
+
+PROJECTS
+Early-Warning Surveillance Dashboard
+• Daily cluster detection across hospitals and labs.
+• Tools: R Shiny, PostGIS
+Measles Outbreak Response
+• Contact tracing and a catch-up vaccination campaign.
+• Tools: Go.Data, Field teams
+Dengue Risk Mapping
+• Mapped breeding hotspots against rainfall and case data.
+• Tools: QGIS, Python
+Vaccine Uptake Cohort Study
+• Five-year follow-up of 40,000 participants.
+• Tools: SAS, Stata
+Antimicrobial Resistance Review
+• National review of resistance trends in hospital labs.
+• Tools: R, WHONET
+Wastewater Surveillance Pilot
+• Tracked virus levels in sewage to forecast case rises.
+• Tools: qPCR data, R
+Contact-Tracing Training Programme
+• Course and toolkit for regional health workers.
+• Tools: Workshops, E-learning
+
+ACHIEVEMENTS
+Detected disease clusters 5 days earlier with the new early-warning system
+Contained a measles outbreak within 6 weeks
+Published 12 peer-reviewed papers
+Public Health Impact Award 2023
+Trained 120 field staff across four regions
+
+CERTIFICATIONS
+Certified in Public Health (CPH)
+Field Epidemiology Training Programme (FETP)
+GIS for Public Health Certificate
+
+GOALS
+Goal: Lead a national surveillance programme (within five years)
+Next Step: Complete a PhD in infectious disease modelling
+Timeline: Target: 2030
+
+MOTTO
+Every number is a person.
+
+INTERESTS
+Infectious disease modelling, One Health, Genomic surveillance, Health equity, Data storytelling
